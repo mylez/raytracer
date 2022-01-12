@@ -1,5 +1,5 @@
 # cse167-raytracer
-![Example Output](https://raw.githubusercontent.com/mylez/cse167-raytracer/main/image-output/rgb-teapot-multiple-lights-10spp.png)
+![Example Output](https://raw.githubusercontent.com/mylez/raytracer/main/image-output/rgb-teapot-multiple-lights-10spp.png)
 
     |================================================================|
     |================================================================|
