@@ -1,0 +1,136 @@
+/**************************************************
+Scene.inl contains the definition of the scene graph
+*****************************************************/
+#include "Scene.h"
+#include "Cube.h"
+#include "Obj.h"
+
+using namespace glm;
+
+void Scene::init() {
+    // Create a geometry_store palette
+    geometry_store["cube"] = new Cube;
+    geometry_store["teapot"] = new Obj;
+    geometry_store["bunny"] = new Obj;
+    geometry_store["cube"]->init();
+    geometry_store["teapot"]->init("models/teapot.obj");
+    geometry_store["bunny"]->init("models/bunny.obj");
+
+    // Create a material_store palette
+    material_store["wood"] = new Material;
+    material_store["wood"]->ambient = vec4(0.1f,0.1f,0.1f,1.0f);
+    material_store["wood"]->diffuse = vec4(0.3f,0.15f,0.1f,1.0f);
+    material_store["wood"]->specular = vec4(0.3f,0.15f,0.1f,1.0f);
+    material_store["wood"]->shininess = 100.0f;
+
+    material_store["ceramic"] = new Material;
+    material_store["ceramic"]->ambient = vec4(0.02f, 0.07f, 0.2f, 1.0f);
+    material_store["ceramic"]->diffuse = vec4(0.1f, 0.25f, 0.7f, 1.0f);
+    material_store["ceramic"]->specular = vec4(0.9f, 0.9f, 0.9f, 1.0f);
+    material_store["ceramic"]->shininess = 150.0f;
+
+    material_store["silver"] = new Material;
+    material_store["silver"]->ambient = vec4(0.1f, 0.1f, 0.1f, 1.0f);
+    material_store["silver"]->diffuse = vec4(0.2f, 0.2f, 0.2f, 1.0f);
+    material_store["silver"]->specular = vec4(0.9f, 0.9f, 0.9f, 1.0f);
+    material_store["silver"]->shininess = 50.0f;
+
+    material_store["turquoise"] = new Material;
+    material_store["turquoise"]->ambient = vec4(0.1f, 0.2f, 0.17f, 1.0f);
+    material_store["turquoise"]->diffuse = vec4(0.2f, 0.375f, 0.35f, 1.0f);
+    material_store["turquoise"]->specular = vec4(0.3f, 0.3f, 0.3f, 1.0f);
+    material_store["turquoise"]->shininess = 100.0f;
+
+    material_store["bulb"] = new Material;
+    material_store["bulb"]->ambient = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    material_store["bulb"]->diffuse = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    material_store["bulb"]->specular = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    material_store["bulb"]->emision = vec4(1.0f,0.2f,0.1f,1.0f);
+    material_store["bulb"]->shininess = 200.0f;
+
+    // Create a model_store palette
+    model_store["teapot1"] = new Model;
+    model_store["teapot1"]->geometry = geometry_store["teapot"];
+    model_store["teapot1"]->material = material_store["silver"];
+    model_store["teapot2"] = new Model;
+    model_store["teapot2"]->geometry = geometry_store["teapot"];
+    model_store["teapot2"]->material = material_store["ceramic"];
+    model_store["table piece"] = new Model;
+    model_store["table piece"]->geometry = geometry_store["cube"];
+    model_store["table piece"]->material = material_store["wood"];
+    model_store["bunny"] = new Model;
+    model_store["bunny"]->geometry = geometry_store["bunny"];
+    model_store["bunny"]->material = material_store["turquoise"];
+    model_store["bulb"] = new Model;
+    model_store["bulb"]->geometry = geometry_store["cube"];
+    model_store["bulb"]->material = material_store["bulb"];
+
+    // Create a light_store palette
+    light_store["sun"] = new Light;
+    light_store["sun"]->position = vec4(3.0f,2.0f,1.0f,0.0f);
+    light_store["sun"]->color = 1.0f * vec4(1.0f,1.0f,1.0f,1.0f);
+
+    light_store["bulb"] = new Light;
+    light_store["bulb"]->position = vec4(0.0f,2.0f,0.0f,0.0f);
+    light_store["bulb"]->color = 1.5f * vec4(1.0f,0.2f,0.1f,1.0f);
+
+    // Build the scene graph
+    node["table"] = new Node;
+    node["table top"] = new Node;
+    node["table leg"] = new Node;
+    node["teapot1"] = new Node;
+    node["teapot2"] = new Node;
+    node["bunny"] = new Node;
+
+    node["table"]->child_nodes.push_back( node["table top"] );
+    node["table"]->child_transforms.push_back( translate(vec3(0.0f,1.2f,0.0f)) );
+    node["table"]->child_nodes.push_back( node["table leg"] );
+    node["table"]->child_transforms.push_back( translate(vec3(-0.9f,0.0f,-0.4f)) );
+    node["table"]->child_nodes.push_back( node["table leg"] );
+    node["table"]->child_transforms.push_back( translate(vec3(-0.9f,0.0f,0.4f)) );
+    node["table"]->child_nodes.push_back( node["table leg"] );
+    node["table"]->child_transforms.push_back( translate(vec3(0.9f,0.0f,0.4f)) );
+    node["table"]->child_nodes.push_back( node["table leg"] );
+    node["table"]->child_transforms.push_back( translate(vec3(0.9f,0.0f,-0.4f)) );
+
+    node["table leg"]->models.push_back( model_store["table piece"] );
+    node["table leg"]->model_transforms.push_back(translate(vec3(0.0f,0.5f,0.0f)) * scale(vec3(0.2f,1.0f,0.2f)) );
+
+    node["table top"]->models.push_back( model_store["table piece"] );
+    node["table top"]->model_transforms.push_back(translate(vec3(0.0f,-0.1f,0.0f)) * scale(vec3(2.0f,0.2f,1.0f)) );
+    node["table top"]->child_nodes.push_back( node["teapot1"] );
+    node["table top"]->child_transforms.push_back( translate(vec3(-0.5f,0.0f,0.0f)) );
+    node["table top"]->child_nodes.push_back( node["teapot2"] );
+    node["table top"]->child_transforms.push_back(translate(vec3( 0.5f,0.0f,0.0f)) * rotate(-120.0f * float(M_PI) / 180.0f, vec3(0.0f, 1.0f, 0.0f) ) );
+
+    node["teapot1"]->models.push_back( model_store["teapot1"] );
+    node["teapot1"]->model_transforms.push_back( scale(vec3(0.5f)) );
+    node["teapot2"]->models.push_back( model_store["teapot2"] );
+    node["teapot2"]->model_transforms.push_back(scale(vec3(1.0f,1.5f,1.0f)) * scale(vec3(0.5f)) );
+
+    node["bunny"]->models.push_back( model_store["bunny"] );
+    node["bunny"]->model_transforms.push_back(scale(vec3(0.8f)) * translate(vec3(0.0f,1.0f,0.0f)) );
+
+    node["world"]->child_nodes.push_back( node["table"] );
+    node["world"]->child_transforms.push_back( mat4(1.0f) );
+    node["world"]->child_nodes.push_back( node["bunny"] );
+    node["world"]->child_transforms.push_back(translate(vec3(-1.8f,0.0f,0.0f)) * rotate(90.0f * float(M_PI) / 180.0f, vec3(0.0f, 1.0f, 0.0f) ));
+    node["world"]->models.push_back( model_store["bulb"] );
+    node["world"]->model_transforms.push_back(translate(vec3(0.0f,2.0f,0.0f)) * scale(vec3(0.1f)) );
+
+    // Put a camera
+    camera = new Camera;
+    camera->target_default = vec3( 0.0f, 1.0f, 0.0f );
+    camera->eye_default = vec3( 0.0f, 1.0f, 5.0f );
+    camera->up_default = vec3( 0.0f, 1.0f, 0.0f );
+    camera->reset();
+
+    // Initialize shader
+    //shader = new SurfaceShader;
+    //shader -> read_source( "shaders/projective.vert", "shaders/lighting.frag" );
+    //shader -> compile();
+    //glUseProgram(shader -> program);
+    //shader -> initUniforms();
+}
+
+// dodo
