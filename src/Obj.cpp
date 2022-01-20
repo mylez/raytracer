@@ -96,6 +96,8 @@ void Obj::init(const char * filename) {
  * @param pos
  * @param norm
  * @return
+ *
+ * @author Miles
  */
 bool Obj::do_intersect(Ray ray, mat4 m, vec3 &pos, vec3 &norm) {
 
