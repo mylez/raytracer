@@ -12,7 +12,6 @@ A multithreaded raytracer.
 
 
 ### And finally, something cool you can do is render scenes as text.
-###     
 
     |================================================================|
     |================================================================|
