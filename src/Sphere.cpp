@@ -13,6 +13,8 @@ using namespace glm;
  * @param inters_pos
  * @param norm
  * @return
+ *
+ * @author Miles
  */
 bool Sphere::do_intersect(Ray ray, mat4 m, vec3 &inters_pos, vec3 &norm) {
 
