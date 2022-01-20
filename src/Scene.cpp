@@ -157,6 +157,8 @@ static void print_vec(vec3 v) {
  * @param intersect
  * @param rec_depth
  * @return
+ *
+ * @author Miles
  */
 vec4 Scene::colorizer(Ray incoming_ray, Intersect intersect, unsigned int rec_depth) {
 
@@ -223,6 +225,8 @@ vec4 Scene::colorizer(Ray incoming_ray, Intersect intersect, unsigned int rec_de
  *
  *  todo - update this function to iterate over and cast rays through
  *         each pixel in the image as per the ray tracing algorithm.
+ *
+ * @author Miles
  */
 void Scene::draw() {
 
